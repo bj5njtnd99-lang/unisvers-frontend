@@ -1,0 +1,950 @@
+/* ============================= */
+/* VARIABLES GLOBALES */
+/* ============================= */
+
+:root {
+  --blue-header: #0F3E6D;
+  --blue-secondary: #165B9E;
+  --bg-light: #F4F7FB;
+  --white: #ffffff;
+  --text-main: #1d1d1d;
+  --text-muted: #5b6475;
+  --border-soft: #dde3f0;
+  --shadow-soft: 0 2px 10px rgba(0, 0, 0, 0.06);
+  --radius-card: 14px;
+}
+
+/* ============================= */
+/* RESET DE BASE */
+/* ============================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-light);
+  color: var(--text-main);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ============================= */
+/* LAYOUT GÉNÉRAL */
+/* ============================= */
+
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.home-main {
+  padding: 2.5rem 1.5rem 3rem;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+/* ============================= */
+/* HEADER / NAV */
+/* ============================= */
+
+.site-header {
+  background: var(--blue-header);
+  color: var(--white);
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.brand-logo {
+  position: relative;
+  width: 36px;
+  height: 36px;
+}
+
+.brand-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #f6f9ff;
+}
+
+.brand-ring--left {
+  width: 26px;
+  height: 26px;
+  top: 5px;
+  left: 2px;
+}
+
+.brand-ring--right {
+  width: 26px;
+  height: 26px;
+  top: 5px;
+  left: 12px;
+  border-color: rgba(255, 255, 255, 0.75);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0.08em; /* un peu moins espacé, plus lisible */
+  text-transform: none;   /* on respecte exactement ce que tu écris : UnisVers */
+}
+
+.brand-tagline {
+  font-size: 0.85rem;
+  opacity: 0.92;
+}
+
+.main-nav {
+  display: flex;
+  gap: 1.6rem;
+  font-size: 0.95rem;
+  align-items: center;
+}
+
+.main-nav a {
+  color: #f5f7ff;
+  position: relative;
+  padding-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.main-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: #ffffff;
+  transition: width 0.18s ease;
+}
+
+.main-nav a:hover {
+  color: #ffffff;
+}
+
+.main-nav a:hover::after {
+  width: 100%;
+}
+
+/* ============================= */
+/* HERO D’ACCUEIL */
+/* ============================= */
+
+.hero-main {
+  background: var(--white);
+  border-radius: 0;
+  padding: 3rem 1.5rem 2.3rem;
+  text-align: center;
+  margin-bottom: 2.6rem;
+}
+
+.hero-kicker {
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  color: #2563eb;
+  margin-bottom: 0.6rem;
+}
+
+.hero-main h2 {
+  font-size: 2.8rem;
+  margin: 0 0 0.9rem;
+  color: #123A63;
+}
+
+.hero-subtitle {
+  max-width: 640px;
+  margin: 0 auto 1.8rem;
+  font-size: 1.04rem;
+  color: #4b5563;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.9rem;
+  margin-bottom: 0.9rem;
+}
+
+.hero-footnote {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+/* ============================= */
+/* BOUTONS */
+/* ============================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.92rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.08s ease, box-shadow 0.12s ease, filter 0.08s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--blue-secondary);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(22, 91, 158, 0.25);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: rgba(15, 62, 109, 0.35);
+  color: #0F3E6D;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: #165B9E;
+  border-color: #d1d9e8;
+}
+
+.btn-outline {
+  background: transparent;
+}
+
+/* ============================= */
+/* SECTIONS HOME */
+/* ============================= */
+
+.home-section {
+  margin-bottom: 2.4rem;
+}
+
+.home-section-alt {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem 1.7rem;
+  box-shadow: 0 6px 18px rgba(15, 62, 109, 0.07);
+}
+
+.section-title {
+  font-size: 1.35rem;
+  margin-bottom: 0.4rem;
+  color: #123A63;
+}
+
+.section-intro {
+  font-size: 0.96rem;
+  color: #4b5563;
+  max-width: 720px;
+  margin-bottom: 1.4rem;
+}
+
+/* Grille de cartes */
+
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.6rem;
+}
+
+.section-card {
+  background: #ffffff;
+  border-radius: var(--radius-card);
+  padding: 1.5rem 1.4rem 1.5rem;
+  box-shadow: var(--shadow-soft);
+  text-align: left;
+  min-height: 180px;
+}
+
+.section-card h4 {
+  margin-top: 0;
+  margin-bottom: 0.55rem;
+  font-size: 1.05rem;
+  color: #123A63;
+}
+
+.section-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.card-link {
+  display: inline-block;
+  margin-top: 0.7rem;
+  font-size: 0.9rem;
+  color: var(--blue-secondary);
+}
+
+/* ============================= */
+/* PAGES LISTES (PROJETS, IDÉES, SONDAGES, ACTUS) */
+/* ============================= */
+
+.page-title {
+  font-size: 1.6rem;
+  margin: 1.5rem 0 0.4rem;
+  color: #123A63;
+}
+
+.page-intro {
+  font-size: 0.95rem;
+  color: #4b5563;
+  margin-bottom: 1.3rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+
+/* Cartes génériques (projets, actu, etc.) */
+.card {
+  background: #ffffff;
+  padding: 1.1rem 1.1rem 1.2rem;
+  border-radius: 10px;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.12s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15, 62, 109, 0.12);
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 0.4rem;
+  font-size: 1.05rem;
+  color: #123A63;
+}
+
+.card p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #4b5563;
+}
+
+/* ============================= */
+/* RECHERCHE & IDÉES */
+/* ============================= */
+
+.search-input {
+  padding: 0.55rem 0.9rem;
+  margin: 1rem 0 0.8rem;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 999px;
+  border: 1px solid #dde3f0;
+  background: #ffffff;
+  font-size: 0.9rem;
+}
+
+.idee {
+  background: #ffffff;
+  margin: 0.8rem 0;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  box-shadow: var(--shadow-soft);
+}
+
+.idee p {
+  margin: 0 0 0.4rem;
+}
+
+.idee small {
+  color: var(--text-muted);
+}
+
+/* ============================= */
+/* ADMIN / DASHBOARD */
+/* ============================= */
+
+.admin-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-light);
+}
+
+.admin-header {
+  background: var(--blue-header);
+  color: #fff;
+  padding: 1rem 1.5rem;
+}
+
+.admin-main {
+  flex: 1;
+  padding: 1.5rem;
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1.1fr;
+  gap: 1.4rem;
+  align-items: flex-start;
+}
+
+.stats-grid {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.stat-pill {
+  background: #ffffff;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  box-shadow: var(--shadow-soft);
+  font-size: 0.9rem;
+}
+
+.admin-forms {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.admin-form {
+  background: #ffffff;
+  padding: 1rem 1rem 1.1rem;
+  border-radius: 10px;
+  box-shadow: var(--shadow-soft);
+}
+
+.admin-form h3 {
+  margin-top: 0;
+  margin-bottom: 0.7rem;
+}
+
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+  width: 100%;
+  margin-bottom: 0.55rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-soft);
+  font-size: 0.9rem;
+}
+
+.admin-form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.notif-list {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.notif-item {
+  background: #ffffff;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 6px;
+  box-shadow: var(--shadow-soft);
+  font-size: 0.88rem;
+}
+
+.notif-item .meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Login admin */
+
+.login-container {
+  max-width: 320px;
+  margin: 5rem auto;
+  background: #ffffff;
+  padding: 1.7rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(15, 62, 109, 0.18);
+}
+
+.login-container h2 {
+  margin-top: 0;
+  margin-bottom: 0.9rem;
+}
+
+.login-container input {
+  width: 100%;
+  margin-bottom: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-soft);
+}
+
+.login-message {
+  color: #c00;
+  font-size: 0.85rem;
+}
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 900px) {
+  .home-main {
+    padding: 2rem 1rem 2.5rem;
+  }
+
+  .section-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  .admin-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+
+  .hero-main {
+    padding: 2.4rem 1rem 2rem;
+  }
+
+  .hero-main h2 {
+    font-size: 2.1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.98rem;
+  }
+
+  .main-nav {
+    gap: 1rem;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+  }
+}
+/* ========================================================= */
+/* ===============   HOME UPGRADE — VISUEL V1   ============= */
+/* ========================================================= */
+
+/* ----- HERO ----- */
+
+.hero-main {
+  padding: 4rem 1.5rem 3rem;
+  background: var(--white);
+  border-radius: 0 0 18px 18px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+  margin-bottom: 3.2rem;
+}
+
+.hero-text {
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero-main h2 {
+  font-size: 2.8rem;
+  margin-bottom: 0.6rem;
+  color: #0f3e6d;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  margin-bottom: 1.8rem;
+  color: #555;
+  line-height: 1.55;
+}
+
+.hero-actions {
+  margin-bottom: 1.2rem;
+  gap: 1.2rem;
+}
+
+.hero-kicker {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #165b9e;
+  margin-bottom: 0.8rem;
+}
+
+.hero-footnote {
+  margin-top: 1.4rem;
+  color: #6b7280;
+  font-size: 0.92rem;
+}
+
+/* ----- SECTION TITLES ----- */
+
+.section-title {
+  font-size: 1.65rem;
+  margin-bottom: 0.5rem;
+  color: #0f3e6d;
+  font-weight: 700;
+}
+
+.section-intro {
+  font-size: 1rem;
+  max-width: 780px;
+  margin-bottom: 2rem;
+  color: #4b5563;
+  line-height: 1.55;
+}
+
+/* ----- SECTION SPACING ----- */
+
+.home-section {
+  margin-bottom: 3.8rem;
+}
+
+/* ----- ALTERNATE SECTION (fond blanc augmenté) ----- */
+
+.home-section-alt {
+  padding: 2.4rem 1.8rem;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+}
+
+/* ----- GRID ----- */
+
+.section-grid {
+  gap: 1.8rem;
+}
+
+/* ----- CARDS ----- */
+
+.section-card {
+  padding: 1.6rem 1.4rem 1.7rem;
+  min-height: 190px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.section-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.09);
+}
+
+.section-card h4 {
+  margin-bottom: 0.55rem;
+  font-size: 1.18rem;
+  color: #0f3e6d;
+}
+
+.section-card p {
+  color: #4b5563;
+  line-height: 1.55;
+  font-size: 0.95rem;
+}
+
+/* Boutons dans cartes */
+.section-card .btn {
+  margin-top: 0.6rem;
+}
+
+/* ----- TAG SOFT ----- */
+
+.tag-soft {
+  display: inline-block;
+  margin-top: 0.8rem;
+  padding: 0.4rem 0.7rem;
+  background: #eef5ff;
+  color: #165b9e;
+  border-radius: 999px;
+  font-size: 0.82rem;
+}
+
+/* ========================================================= */
+/* ===============   FIN HOME UPGRADE V1      =============== */
+/* ========================================================= *//* ========================================================= */
+/* ===============   HOME UPGRADE — VISUEL V2   ============= */
+/* ========================================================= */
+
+/* --- Séparateur doux entre sections --- */
+.home-section::before {
+  content: "";
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  height: 3px;
+  margin: 0 auto 2.6rem;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(22, 91, 158, 0.25),
+    transparent
+  );
+  border-radius: 999px;
+}
+
+/* --- Version plus élégante du hero --- */
+.hero-main {
+  background: #ffffff;
+  border-radius: 0 0 28px 28px;
+  padding: 4.5rem 1.5rem 3.5rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.07);
+}
+
+.hero-main h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.hero-main .hero-subtitle {
+  font-size: 1.15rem;
+  color: #4a5160;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* --- Apparition en douceur des sections --- */
+.home-section,
+.hero-main {
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.home-section {
+  animation-delay: 0.15s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Cartes encore plus harmonieuses --- */
+.section-card {
+  border: 1px solid rgba(0,0,0,0.03);
+  padding-top: 1.8rem;
+  padding-bottom: 1.8rem;
+}
+
+/* --- Boutons plus institutionnels --- */
+.btn-primary {
+  background: #165B9E;
+  color: white;
+  border-color: #165B9E;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background: #0F3E6D;
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  color: #165B9E;
+  border: 2px solid #165B9E;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  font-weight: 600;
+  border-width: 2px;
+}
+
+.btn-secondary:hover,
+.btn-ghost:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* --- Élégance des titres de sections --- */
+.section-title {
+  position: relative;
+  padding-bottom: 0.4rem;
+}
+
+.section-title::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 3px;
+  background: #165B9E;
+  margin-top: 0.6rem;
+  border-radius: 999px;
+}
+/* ============================= */
+/* FOOTER GLOBAL UNISVERS        */
+/* ============================= */
+
+.site-footer {
+  margin-top: 3rem;
+  padding: 1.6rem 1.5rem 1.8rem;
+  background: #f3f4f6;
+  border-top: 1px solid #e0e5f0;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.footer-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.footer-brand {
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #111827;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.footer-links a {
+  color: #4b5563;
+  text-decoration: none;
+  font-size: 0.82rem;
+}
+
+.footer-links a:hover {
+  color: #111827;
+  text-decoration: underline;
+}
+
+/* Responsive footer */
+@media (max-width: 768px) {
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+/* ========================================= */
+/* BACKGROUNDS VISUELS PAR PAGE (STRUCTURE) */
+/* ========================================= */
+
+.home-main {
+  position: relative;
+  z-index: 1;
+}
+
+/* Calque de fond commun */
+.home-main {
+  position: relative;
+  z-index: 0;
+}
+
+/* Calque de fond UNIQUEMENT pour le contenu */
+.home-main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  opacity: 0.90;
+  filter: blur(3px);
+
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Accueil */
+.page-home::before {
+  background-image: url("/bg/home.jpg");
+}
+
+/* Présentation */
+.page-presentation::before {
+  background-image: url("/bg/presentation.jpg");
+}
+
+/* Projets */
+.page-projets::before {
+  background-image: url("/bg/projets.jpg");
+}
+
+/* Sondages */
+.page-sondages::before {
+  background-image: url("/bg/sondages.jpg");
+}
+
+/* Idées */
+.page-idees::before {
+  background-image: url("/bg/idees.jpg");
+}
+
+/* Actualités */
+.page-actualites::before {
+  background-image: url("/bg/actualites.jpg");
+}

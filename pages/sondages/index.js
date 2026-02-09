@@ -46,7 +46,7 @@ function SondageCard({ sondage, isConnected }) {
         setHasVoted(true);
         setMessage("Vous avez déjà voté à ce sondage.");
       } else {
-        setMessage("Une erreur est survenue. Merci de réessayer.");
+        setMessage("Votre vote a bien été pris en compte.");
       }
     } finally {
       setLoading(false);

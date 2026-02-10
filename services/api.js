@@ -1,4 +1,3 @@
-// services/api.js
 // Client HTTP UnisVers — version propre et stable
 
 const API_BASE =

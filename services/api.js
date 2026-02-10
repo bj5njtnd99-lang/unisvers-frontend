@@ -1,19 +1,26 @@
-// services/api.js
-// Client HTTP UnisVers — version propre et stable
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:3000/api";
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE ||
-  "http://localhost:3000/api";
+function getUserToken() {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("unisvers_user_token");
+}
 
-async function request(method, path, body) {
+async function request(method, path, body, { auth = false } = {}) {
   const url = `${API_BASE}${path}`;
 
-  const options = {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
+  const headers = { "Content-Type": "application/json" };
+
+  if (auth) {
+    const token = getUserToken();
+    if (!token) {
+      const err = new Error("Non connecté");
+      err.code = "AUTH_REQUIRED";
+      throw err;
+    }
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const options = { method, headers };
 
   if (body !== undefined) {
     options.body = JSON.stringify(body);
@@ -26,9 +33,14 @@ async function request(method, path, body) {
     try {
       text = await res.text();
     } catch {}
-    throw new Error(
+
+    const err = new Error(
       `Erreur API ${res.status} sur ${url} : ${text || res.statusText}`
     );
+    err.status = res.status;
+    err.url = url;
+    err.body = text;
+    throw err;
   }
 
   try {
@@ -44,5 +56,18 @@ export const api = {
   },
   post(path, body) {
     return request("POST", path, body);
+  },
+
+  // ✅ endpoints nécessitant un utilisateur connecté
+  getAuth(path) {
+    return request("GET", path, undefined, { auth: true });
+  },
+  postAuth(path, body) {
+    return request("POST", path, body, { auth: true });
+  },
+
+  // ✅ helper clair pour le vote
+  voteSondage(sondageId, optionLabel) {
+    return request("POST", `/sondages/${sondageId}/vote`, { option: optionLabel }, { auth: true });
   },
 };

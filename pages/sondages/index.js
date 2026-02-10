@@ -34,7 +34,7 @@ function SondageCard({ sondage, isConnected }) {
     setMessage("");
 
     try {
-      await api.post(/sondages/${sondage.id}/vote, {
+      await api.post(`/sondages/${sondage.id}/vote`, {
         option: selected,
         userId,
       });
@@ -46,7 +46,7 @@ function SondageCard({ sondage, isConnected }) {
         setHasVoted(true);
         setMessage("Vous avez déjà voté à ce sondage.");
       } else {
-        setMessage("Votre vote a bien été pris en compte.");
+        setMessage("Une erreur est survenue, veuillez réessayer plus tard.");
       }
     } finally {
       setLoading(false);
@@ -64,14 +64,12 @@ function SondageCard({ sondage, isConnected }) {
               <label>
                 <input
                   type="radio"
-                  name={sondage-${sondage.id}}
+                  name={`sondage-${sondage.id}`}
                   value={opt.label}
                   onChange={() => setSelected(opt.label)}
                   disabled={!isConnected || loading || hasVoted}
                 />
-                <span className="sondage-label">
-                  {opt.label}
-                </span>
+                <span className="sondage-label">{opt.label}</span>
               </label>
             </li>
           ))}
@@ -82,18 +80,12 @@ function SondageCard({ sondage, isConnected }) {
         onClick={handleVote}
         disabled={loading || !isConnected || hasVoted}
       >
-        {hasVoted
-          ? "Vote enregistré"
-          : loading
-          ? "Envoi en cours..."
-          : "Voter"}
+        {hasVoted ? "Vote enregistré" : loading ? "Envoi en cours..." : "Voter"}
       </button>
 
       {!isConnected && (
         <p className="info-message">
-          <Link href="/compte">
-            Créer un compte pour participer aux sondages
-          </Link>
+          <Link href="/compte">Créer un compte pour participer aux sondages</Link>
         </p>
       )}
 
@@ -107,8 +99,7 @@ export default function Sondages() {
   const [loading, setLoading] = useState(true);
 
   const isConnected =
-    typeof window !== "undefined" &&
-    localStorage.getItem("userToken");
+    typeof window !== "undefined" && Boolean(localStorage.getItem("userToken"));
 
   useEffect(() => {
     if (!isConnected) {
@@ -121,6 +112,9 @@ export default function Sondages() {
       .then((data) => {
         setSondages(data || []);
       })
+      .catch(() => {
+        setSondages([]);
+      })
       .finally(() => setLoading(false));
   }, [isConnected]);
 
@@ -129,7 +123,6 @@ export default function Sondages() {
       <Header />
 
       <main className="home-main page-sondages">
-        {/* ===== HERO ===== */}
         <section className="hero-main">
           <div className="hero-text">
             <p className="hero-kicker">Sondages · Marseillan</p>
@@ -163,7 +156,6 @@ export default function Sondages() {
           </div>
         </section>
 
-        {/* ===== LISTE DES SONDAGES ===== */}
         <section className="home-section" id="liste-sondages">
           <h3 className="section-title">Sondages disponibles</h3>
 
@@ -184,11 +176,7 @@ export default function Sondages() {
           {isConnected && !loading && sondages.length > 0 && (
             <div className="section-grid">
               {sondages.map((s) => (
-                <SondageCard
-                  key={s.id}
-                  sondage={s}
-                  isConnected={isConnected}
-                />
+                <SondageCard key={s.id} sondage={s} isConnected={isConnected} />
               ))}
             </div>
           )}

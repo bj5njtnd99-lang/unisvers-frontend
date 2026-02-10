@@ -6,7 +6,7 @@ const API_BASE =
   "http://localhost:3000/api";
 
 async function request(method, path, body) {
-  const url = ${API_BASE}${path};
+  const url = `${API_BASE}${path}`;
 
   const options = {
     method,
@@ -27,7 +27,7 @@ async function request(method, path, body) {
       text = await res.text();
     } catch {}
     throw new Error(
-      Erreur API ${res.status} sur ${url} : ${text || res.statusText}
+      `Erreur API ${res.status} sur ${url} : ${text || res.statusText}`
     );
   }
 
@@ -45,15 +45,4 @@ export const api = {
   post(path, body) {
     return request("POST", path, body);
   },
-}; pages/sondages/index.js:import { useEffect } from "react";
-import { useRouter } from "next/router";
-
-export default function IndexRedirect() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace("/actualites");
-  }, [router]);
-
-  return null;
-}
+};

@@ -1,199 +1,106 @@
 import { useEffect, useState } from "react";
-import Header from "../../components/Header";
-import { api } from "../../services/api";
 import Link from "next/link";
+import { api } from "../../services/api";
+import { useAuth } from "../../lib/useAuth";
 
-function SondageCard({ sondage, isConnected }) {
-  const [selected, setSelected] = useState(null);
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [hasVoted, setHasVoted] = useState(false);
+export default function SondagesPage() {
+  const { ready, isAuthenticated } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [sondages, setSondages] = useState([]);
+  const [error, setError] = useState("");
 
-  const userId =
-    typeof window !== "undefined"
-      ? localStorage.getItem("userToken")
-      : null;
-
-  const handleVote = async () => {
-    if (!isConnected || !userId) {
-      setMessage("Veuillez créer un compte pour participer.");
-      return;
-    }
-
-    if (!selected) {
-      setMessage("Merci de choisir une réponse avant de voter.");
-      return;
-    }
-
-    if (hasVoted) {
-      setMessage("Vous avez déjà voté à ce sondage.");
-      return;
-    }
-
+  async function load() {
+    setError("");
     setLoading(true);
-    setMessage("");
-
     try {
-      await api.post(`/sondages/${sondage.id}/vote`, {
-        option: selected,
-        userId,
-      });
-
-      setHasVoted(true);
-      setMessage("Votre vote a bien été pris en compte.");
+      const data = await api.get("/sondages");
+      setSondages(Array.isArray(data) ? data : []);
     } catch (e) {
-      if (e?.status === 403) {
-        setHasVoted(true);
-        setMessage("Vous avez déjà voté à ce sondage.");
-      } else {
-        setMessage("Votre vote a bien été pris en compte.");
-      }
+      setError(e?.message || "Erreur chargement");
     } finally {
       setLoading(false);
     }
-  };
-
-  return (
-    <article className="section-card">
-      <h4>{sondage.question || "Sondage sans titre"}</h4>
-
-      <ul className="sondage-options">
-        {Array.isArray(sondage.options) &&
-          sondage.options.map((opt, idx) => (
-            <li key={idx}>
-              <label>
-                <input
-                  type="radio"
-                  name={`sondage-${sondage.id}`}
-                  value={opt.label}
-                  onChange={() => setSelected(opt.label)}
-                  disabled={!isConnected || loading || hasVoted}
-                />
-                <span className="sondage-label">
-                  {opt.label}
-                </span>
-              </label>
-            </li>
-          ))}
-      </ul>
-
-      <button
-        className="btn btn-primary"
-        onClick={handleVote}
-        disabled={loading || !isConnected || hasVoted}
-      >
-        {hasVoted
-          ? "Vote enregistré"
-          : loading
-          ? "Envoi en cours..."
-          : "Voter"}
-      </button>
-
-      {!isConnected && (
-        <p className="info-message">
-          <Link href="/compte">
-            Créer un compte pour participer aux sondages
-          </Link>
-        </p>
-      )}
-
-      {message && <p className="info-message">{message}</p>}
-    </article>
-  );
-}
-
-export default function Sondages() {
-  const [sondages, setSondages] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const isConnected =
-    typeof window !== "undefined" &&
-    localStorage.getItem("userToken");
+  }
 
   useEffect(() => {
-    if (!isConnected) {
-      setLoading(false);
-      return;
-    }
+    load();
+  }, []);
 
-    api
-      .get("/sondages")
-      .then((data) => {
-        setSondages(data || []);
-      })
-      .finally(() => setLoading(false));
-  }, [isConnected]);
+  async function vote(sondageId, optionLabel) {
+    setError("");
+    try {
+      await api.voteSondage(sondageId, optionLabel);
+      alert("Vote enregistré ✅");
+    } catch (e) {
+      if (e?.code === "AUTH_REQUIRED" || e?.status === 401) {
+        alert("Tu dois être connecté pour voter.");
+        return;
+      }
+      // 403 = déjà voté
+      if (e?.status === 403) {
+        alert("Tu as déjà voté sur ce sondage.");
+        return;
+      }
+      alert(e?.message || "Erreur vote");
+    }
+  }
 
   return (
-    <div>
-      <Header />
+    <main style={{ padding: 16, maxWidth: 900, margin: "0 auto" }}>
+      <h1 style={{ fontSize: 28, marginBottom: 8 }}>Sondages</h1>
 
-      <main className="home-main page-sondages">
-        {/* ===== HERO ===== */}
-        <section className="hero-main">
-          <div className="hero-text">
-            <p className="hero-kicker">Sondages · Marseillan</p>
+      {!ready ? (
+        <p>Chargement…</p>
+      ) : !isAuthenticated ? (
+        <p style={{ marginBottom: 16 }}>
+          Pour voter, tu dois être connecté.{" "}
+          <Link href="/compte">Aller à “Compte”</Link>
+        </p>
+      ) : (
+        <p style={{ marginBottom: 16 }}>Connecté ✅ Tu peux voter (1 fois par sondage).</p>
+      )}
 
-            <h2>Exprimer son avis simplement.</h2>
+      <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
+        <button onClick={load}>Rafraîchir</button>
+        <Link href="/sondages/proposer">Proposer un sondage</Link>
+      </div>
 
-            <p className="hero-subtitle">
-              Les sondages permettent de faire émerger des tendances collectives
-              à partir de questions claires et accessibles.
-            </p>
+      {error ? <p style={{ color: "crimson" }}>{error}</p> : null}
 
-            <div className="hero-actions">
-              {isConnected ? (
-                <Link href="/sondages/proposer" className="btn btn-primary">
-                  Proposer un sondage
-                </Link>
-              ) : (
-                <Link href="/compte" className="btn btn-primary">
-                  Créer un compte pour participer
-                </Link>
-              )}
+      {loading ? <p>Chargement des sondages…</p> : null}
 
-              <a href="#liste-sondages" className="btn btn-ghost">
-                Voir les sondages
-              </a>
-            </div>
+      {!loading && sondages.length === 0 ? (
+        <p>Aucun sondage publié pour le moment.</p>
+      ) : null}
 
-            <p className="hero-footnote">
-              Un compte citoyen unique est requis pour participer.
-            </p>
-          </div>
-        </section>
+      <div style={{ display: "grid", gap: 16 }}>
+        {sondages.map((s) => (
+          <section
+            key={s.id}
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: 10,
+              padding: 14,
+            }}
+          >
+            <h2 style={{ margin: 0, fontSize: 18 }}>{s.question}</h2>
 
-        {/* ===== LISTE DES SONDAGES ===== */}
-        <section className="home-section" id="liste-sondages">
-          <h3 className="section-title">Sondages disponibles</h3>
-
-          {!isConnected && (
-            <p>
-              <Link href="/compte">
-                Créez un compte pour consulter et participer aux sondages.
-              </Link>
-            </p>
-          )}
-
-          {loading && <p>Chargement des sondages…</p>}
-
-          {isConnected && !loading && sondages.length === 0 && (
-            <p>Aucun sondage n’est disponible pour le moment.</p>
-          )}
-
-          {isConnected && !loading && sondages.length > 0 && (
-            <div className="section-grid">
-              {sondages.map((s) => (
-                <SondageCard
-                  key={s.id}
-                  sondage={s}
-                  isConnected={isConnected}
-                />
+            <div style={{ display: "grid", gap: 10, marginTop: 12 }}>
+              {(s.options || []).map((o) => (
+                <button
+                  key={o.label}
+                  onClick={() => vote(s.id, o.label)}
+                  disabled={!isAuthenticated}
+                  title={!isAuthenticated ? "Connecte-toi pour voter" : "Voter"}
+                  style={{ padding: 10 }}
+                >
+                  {o.label}
+                </button>
               ))}
             </div>
-          )}
-        </section>
-      </main>
-    </div>
+          </section>
+        ))}
+      </div>
+    </main>
   );
 }

@@ -49,7 +49,8 @@ export default function MentionsLegales() {
                 de la plateforme UnisVers sont assurés par&nbsp;:
               </p>
               <p>
-                <strong>Infinity8.org</strong><br />
+                <strong>Infinity8.org</strong>
+                <br />
                 Structure éditrice et conceptrice du Core UnisVers.
               </p>
             </div>
@@ -64,6 +65,18 @@ export default function MentionsLegales() {
               <p>
                 La plateforme UnisVers constitue un cadre technique et
                 informationnel, sans orientation politique propre.
+              </p>
+            </div>
+
+            {/* ✅ NOUVELLE CARD CONTACT */}
+            <div className="section-card">
+              <h4>Contact</h4>
+              <p>
+                Pour toute demande d’information, vous pouvez nous contacter à
+                l’adresse suivante&nbsp;:
+              </p>
+              <p>
+                <strong>infinity8org@proton.me</strong>
               </p>
             </div>
           </div>
